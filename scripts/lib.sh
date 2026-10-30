@@ -76,5 +76,6 @@ roll_to() {  # roll_to <version>
   compose up -d --wait db || return 1
   compose up -d --no-deps --force-recreate app || return 1
   wait_ready "${READY_TIMEOUT:-60}" || return 1
-  "$SCRIPT_DIR/smoke_test.sh" "$1"
+  # Invoke via bash: the executable bit is lost when committing from Windows.
+  bash "$SCRIPT_DIR/smoke_test.sh" "$1"
 }

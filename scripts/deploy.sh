@@ -37,5 +37,5 @@ if [ -z "$LAST_GOOD" ]; then
 fi
 
 log "AUTO-ROLLBACK to $LAST_GOOD"
-"$SCRIPT_DIR/rollback.sh" "$LAST_GOOD" || die "auto-rollback failed - follow docs/RUNBOOK.md (manual rollback)"
+bash "$SCRIPT_DIR/rollback.sh" "$LAST_GOOD" || die "auto-rollback failed - follow docs/RUNBOOK.md (manual rollback)"
 exit 1   # the requested release still failed
