@@ -1,0 +1,42 @@
+
+===== 0. Baseline =====
+/healthz   HTTP 200  {"status":"ok"}
+/readyz    HTTP 200  {"status":"ready","checks":{"database":"ok"}}
+{"id":10,"title":"pre-outage record drill-1793342603","severity":"medium","status":"open","created_at":"2026-10-30T06:43:23.833212Z"}
+
+===== 1. Inject failure: stop the database container (outage held 100s) =====
+ Container apex-ops-db-1  Stopping
+ Container apex-ops-db-1  Stopped
+
+===== 2. Detect: probes, metrics and alerts as seen by monitoring =====
+/healthz   HTTP 200  {"status":"ok"}
+/readyz    HTTP 000  
+apex_http_requests_total{method="GET",route="/readyz",status="503"} 2.0
+apex_db_up 0.0
+Prometheus alerts:
+"alertname":"ApexDatabaseUnreachable"	"state":"firing"
+
+===== 3. Triage: what is running? =====
+SERVICE      STATE     STATUS
+app          running   Up 2 minutes (healthy)
+db           exited    Exited (0) About a minute ago
+prometheus   running   Up 2 minutes
+
+===== 4. Diagnose: structured app logs (filter by event) =====
+{"ts": "2026-10-30T06:45:08.732+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.4.0", "env": "local", "request_id": "813fc2b1e4fc40069ac751a00ef7a15d", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 3844.17, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:45:11.857+00:00", "level": "WARNING", "logger": "apex.api", "msg": "readiness check failed", "service": "apex-ops-api", "version": "1.4.0", "env": "local", "event": "readiness_failed", "error": "OperationalError: failed to resolve host 'db': [Errno -2] Name or service not known"}
+{"ts": "2026-10-30T06:45:11.859+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.4.0", "env": "local", "request_id": "9d5e95436f9f4e7bb3822408cf117c71", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 3867.89, "client_ip": "172.23.0.1", "event": "http_request"}
+
+===== 5. Remediate: start the database again =====
+ Container apex-ops-db-1  Starting
+ Container apex-ops-db-1  Started
+ Container apex-ops-db-1  Running
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+2026-10-30T06:45:22Z [drill] readiness OK after 0s
+
+===== 6. Verify recovery and data durability =====
+/readyz    HTTP 200  {"status":"ready","checks":{"database":"ok"}}
+record created before the outage is still present -> volume persistence OK
+apex_db_up 1.0
+2026-10-30T06:45:23Z [drill] drill complete

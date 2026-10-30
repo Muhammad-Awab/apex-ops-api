@@ -1,0 +1,108 @@
+# Local deployment of the Apex Operations API.
+#   Deploy / rollback through scripts/deploy.sh and scripts/rollback.sh. They set
+#   APP_VERSION in .env, so plain `docker compose ps|logs` also work afterwards.
+#   Monitoring (Prometheus + alert rules): add `--profile monitoring`.
+name: apex-ops
+
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${DB_USER:-apex}
+      POSTGRES_DB: ${DB_NAME:-apex_ops}
+      POSTGRES_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - backend
+    # No published ports: the database is only reachable from the backend network.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$${POSTGRES_USER}\" -d \"$${POSTGRES_DB}\""]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  app:
+    image: ${APP_IMAGE:-apex-ops-api}:${APP_VERSION:?APP_VERSION is not set - use scripts/deploy.sh <version>}
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ENVIRONMENT: ${ENVIRONMENT:-local}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DB_HOST: db
+      DB_PORT: "5432"
+      DB_USER: ${DB_USER:-apex}
+      DB_NAME: ${DB_NAME:-apex_ops}
+      DB_PASSWORD_FILE: /run/secrets/db_password
+    secrets:
+      - db_password
+    # Bound DNS failure time: when `db` is down, lookups otherwise take ~4s to fail, which made
+    # /readyz slower than the probe timeout (found in the incident drill - docs/evidence/09a_*).
+    dns_opt:
+      - timeout:1
+      - attempts:1
+    ports:
+      - "127.0.0.1:${APP_PORT:-8080}:8080"   # loopback only
+    networks:
+      - backend
+      - frontend
+    # Least privilege at runtime
+    user: "10001:10001"
+    read_only: true
+    tmpfs:
+      - /tmp:size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+    stop_grace_period: 25s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  prometheus:
+    image: prom/prometheus:v2.55.1
+    profiles: ["monitoring"]
+    restart: unless-stopped
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alert_rules.yml:/etc/prometheus/alert_rules.yml:ro
+      - prom_data:/prometheus
+    ports:
+      - "127.0.0.1:9090:9090"
+    networks:
+      - backend
+      - frontend
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt   # created by scripts/init_secrets.sh, git-ignored
+
+volumes:
+  db_data:
+  prom_data:
+
+networks:
+  backend:
+    internal: true    # no egress / no host exposure for the database tier
+  frontend: {}

@@ -1,0 +1,20 @@
+# Secrets / local config - never commit
+secrets/*
+!secrets/README.md
+.env
+
+# Local deployment state (release history is machine-specific)
+.deploy/
+
+# Python / tooling
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+reports/
+
+# Assessment brief is confidential - do not publish
+assesment.txt

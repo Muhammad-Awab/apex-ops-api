@@ -1,0 +1,74 @@
+2026-10-30T06:59:37Z [ci] ==> build test image
+sha256:76b2ff6f0d93e6e7bd0474c7868d69a226ebfdd032541da5cdf9b0978a506860
+2026-10-30T06:59:45Z [ci] ==> lint (ruff check)
+All checks passed!
+2026-10-30T06:59:46Z [ci] ==> format (ruff format)
+12 files already formatted
+2026-10-30T06:59:48Z [ci] ==> unit tests + coverage>=80
+============================= test session starts ==============================
+platform linux -- Python 3.12.16, pytest-9.2.0, pluggy-1.7.0
+rootdir: /src
+configfile: pyproject.toml
+testpaths: tests
+plugins: cov-7.1.0, platformdirs-4.14.0, anyio-4.15.1
+collected 18 items
+
+tests/test_config.py ....                                                [ 22%]
+tests/test_health.py .....                                               [ 50%]
+tests/test_incidents.py ....                                             [ 72%]
+tests/test_intentional_failure.py s                                      [ 77%]
+tests/test_observability.py ....                                         [100%]
+
+=============================== warnings summary ===============================
+../opt/venv/lib/python3.12/site-packages/fastapi/testclient.py:1
+  /opt/venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+    from starlette.testclient import TestClient as TestClient  # noqa
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.16-final-0 _______________
+
+Name                    Stmts   Miss Branch BrPart  Cover   Missing
+-------------------------------------------------------------------
+app/__init__.py             0      0      0      0   100%
+app/config.py              53      3     10      1    94%   29-30, 37
+app/db.py                  36      1      4      1    95%   36
+app/logging_config.py      31      0      8      0   100%
+app/main.py               136      1     12      0    99%   141
+app/metrics.py              6      0      0      0   100%
+-------------------------------------------------------------------
+TOTAL                     262      5     34      2    98%
+Required test coverage of 80.0% reached. Total coverage: 97.64%
+=========================== short test summary info ============================
+SKIPPED [1] tests/test_intentional_failure.py:15: intentional failure demo disabled (set RUN_INTENTIONAL_FAILURE=1)
+=================== 17 passed, 1 skipped, 1 warning in 1.62s ===================
+2026-10-30T06:59:56Z [ci] ==> dependency audit (pip-audit)
+No known vulnerabilities found
+2026-10-30T07:00:28Z [ci] ==> Dockerfile lint (hadolint)
+2026-10-30T07:00:30Z [ci] ==> build runtime image
+sha256:7257e2bf583336cf00930e54229a184b91599e9667a573108575f15c9c60160d
+2026-10-30T07:00:35Z [ci] ==> image runs as non-root
+2026-10-30T07:00:35Z [ci] ==> image scan (trivy HIGH/CRITICAL)
+
+apex-ops-api:ci-local (debian 13.7)
+===================================
+Total: 0 (HIGH: 0, CRITICAL: 0)
+
+2026-10-30T07:00:41Z [ci] ==> compose file valid
+2026-10-30T07:00:42Z [ci] ==> alert rules valid (promtool)
+Checking /tmp/rules.yml
+  SUCCESS: 4 rules found
+
+2026-10-30T07:00:43Z [ci] ------------------------------------------------------------
+2026-10-30T07:00:43Z [ci] PASS  build test image
+2026-10-30T07:00:43Z [ci] PASS  lint (ruff check)
+2026-10-30T07:00:43Z [ci] PASS  format (ruff format)
+2026-10-30T07:00:43Z [ci] PASS  unit tests + coverage>=80
+2026-10-30T07:00:43Z [ci] PASS  dependency audit (pip-audit)
+2026-10-30T07:00:43Z [ci] PASS  Dockerfile lint (hadolint)
+2026-10-30T07:00:43Z [ci] PASS  build runtime image
+2026-10-30T07:00:43Z [ci] PASS  image runs as non-root
+2026-10-30T07:00:43Z [ci] PASS  image scan (trivy HIGH/CRITICAL)
+2026-10-30T07:00:43Z [ci] PASS  compose file valid
+2026-10-30T07:00:43Z [ci] PASS  alert rules valid (promtool)
+2026-10-30T07:00:44Z [ci] ALL GATES PASSED - image apex-ops-api:ci-local is releasable.

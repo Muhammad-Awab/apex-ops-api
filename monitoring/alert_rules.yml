@@ -1,0 +1,42 @@
+groups:
+  - name: apex-ops-api
+    rules:
+      - alert: ApexApiDown
+        expr: up{job="apex-ops-api"} == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "Apex API scrape target is down"
+          runbook: "docs/RUNBOOK.md#scenario-a-api-down--not-responding"
+
+      - alert: ApexDatabaseUnreachable
+        expr: apex_db_up == 0
+        for: 1m
+        labels:
+          severity: page
+        annotations:
+          summary: "Apex API cannot reach PostgreSQL (readiness failing)"
+          runbook: "docs/RUNBOOK.md#scenario-b-readiness-failing--database-unreachable"
+
+      - alert: ApexHighErrorRate
+        expr: |
+          sum(rate(apex_http_requests_total{status=~"5.."}[5m]))
+            / clamp_min(sum(rate(apex_http_requests_total[5m])), 1e-9) > 0.05
+        for: 5m
+        labels:
+          severity: page
+        annotations:
+          summary: "More than 5% of requests are failing with 5xx"
+          runbook: "docs/RUNBOOK.md#scenario-c-elevated-5xx-after-a-release"
+
+      - alert: ApexHighLatencyP95
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(apex_http_request_duration_seconds_bucket{route!~"/metrics|/healthz"}[5m]))) > 0.5
+        for: 10m
+        labels:
+          severity: ticket
+        annotations:
+          summary: "p95 latency above 500ms for 10 minutes"
+          runbook: "docs/RUNBOOK.md#scenario-d-slow-responses"

@@ -1,0 +1,19 @@
+2026-10-30T06:37:00Z [deploy] deploying apex-ops-api:1.1.0 (last known good: 1.0.0)
+ Container apex-ops-db-1  Running
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+ Container apex-ops-app-1  Recreate
+ Container apex-ops-app-1  Recreated
+ Container apex-ops-app-1  Starting
+ Container apex-ops-app-1  Started
+2026-10-30T06:37:08Z [deploy] readiness OK after 4s
+2026-10-30T06:37:08Z [smoke] PASS  liveness /healthz returns 200
+2026-10-30T06:37:08Z [smoke] PASS  readiness /readyz returns 200
+2026-10-30T06:37:08Z [smoke] PASS  running version is 1.1.0
+2026-10-30T06:37:09Z [smoke] PASS  POST /api/v1/incidents creates a record
+2026-10-30T06:37:09Z [smoke] PASS  GET /api/v1/incidents/{id} reads it back
+2026-10-30T06:37:09Z [smoke] PASS  /metrics exposes request counters
+2026-10-30T06:37:10Z [smoke] PASS  app container runs as non-root (uid 10001)
+2026-10-30T06:37:10Z [smoke] PASS  database port is not published to the host
+2026-10-30T06:37:11Z [smoke] result: 8 passed, 0 failed
+2026-10-30T06:37:11Z [deploy] SUCCESS: 1.1.0 is live at http://127.0.0.1:8080

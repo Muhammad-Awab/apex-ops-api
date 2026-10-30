@@ -1,0 +1,40 @@
+2026-10-30T06:35:51Z [deploy] deploying apex-ops-api:1.0.0 (last known good: none)
+ Network apex-ops_backend  Creating
+ Network apex-ops_backend  Created
+ Volume apex-ops_db_data  Creating
+ Volume apex-ops_db_data  Created
+ Container apex-ops-db-1  Creating
+ Container apex-ops-db-1  Created
+ Container apex-ops-db-1  Starting
+ Container apex-ops-db-1  Started
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+ Network apex-ops_frontend  Creating
+ Network apex-ops_frontend  Created
+ Container apex-ops-app-1  Creating
+ Container apex-ops-app-1  Created
+ Container apex-ops-app-1  Starting
+ Container apex-ops-app-1  Started
+2026-10-30T06:36:12Z [deploy] readiness OK after 8s
+2026-10-30T06:36:13Z [smoke] PASS  liveness /healthz returns 200
+2026-10-30T06:36:13Z [smoke] PASS  readiness /readyz returns 200
+2026-10-30T06:36:13Z [smoke] PASS  running version is 1.0.0
+2026-10-30T06:36:13Z [smoke] PASS  POST /api/v1/incidents creates a record
+2026-10-30T06:36:13Z [smoke] PASS  GET /api/v1/incidents/{id} reads it back
+2026-10-30T06:36:13Z [smoke] PASS  /metrics exposes request counters
+2026-10-30T06:36:14Z [smoke] PASS  app container runs as non-root (uid 10001)
+2026-10-30T06:36:14Z [smoke] FAIL  database port is not published to the host
+2026-10-30T06:36:14Z [smoke] result: 7 passed, 1 failed
+2026-10-30T06:36:14Z [deploy] FAILED: 1.0.0 did not pass readiness/smoke checks. Last 20 app log lines:
+{"ts": "2026-10-30T06:36:12.613+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Started server process [1]", "service": "apex-ops-api", "version": "1.0.0", "env": "local"}
+{"ts": "2026-10-30T06:36:12.614+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Waiting for application startup.", "service": "apex-ops-api", "version": "1.0.0", "env": "local"}
+{"ts": "2026-10-30T06:36:12.615+00:00", "level": "INFO", "logger": "apex.api", "msg": "service starting", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "event": "startup", "database": "postgresql+psycopg://apex:***@db:5432/apex_ops"}
+{"ts": "2026-10-30T06:36:12.738+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Application startup complete.", "service": "apex-ops-api", "version": "1.0.0", "env": "local"}
+{"ts": "2026-10-30T06:36:12.739+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)", "service": "apex-ops-api", "version": "1.0.0", "env": "local"}
+{"ts": "2026-10-30T06:36:12.923+00:00", "level": "INFO", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "request_id": "0c53be7cf683409c9cb784592f604aac", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 200, "duration_ms": 5.36, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:36:13.438+00:00", "level": "INFO", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "request_id": "58c0747eba014480a5daac48be1b6b59", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 200, "duration_ms": 1.97, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:36:13.514+00:00", "level": "INFO", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "request_id": "7313776efaa34c20bfe1d512d82b372d", "method": "GET", "path": "/version", "route": "/version", "status": 200, "duration_ms": 1.22, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:36:13.674+00:00", "level": "INFO", "logger": "apex.api", "msg": "incident created", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "request_id": "567df821743843acb4ce2b87524b9ff2", "event": "incident_created", "incident_id": 1}
+{"ts": "2026-10-30T06:36:13.675+00:00", "level": "INFO", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "request_id": "567df821743843acb4ce2b87524b9ff2", "method": "POST", "path": "/api/v1/incidents", "route": "/api/v1/incidents", "status": 201, "duration_ms": 15.28, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:36:13.806+00:00", "level": "INFO", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.0.0", "env": "local", "request_id": "06dd60cf20bd4f3180d4eb3fca763d05", "method": "GET", "path": "/api/v1/incidents/1", "route": "/api/v1/incidents/{incident_id}", "status": 200, "duration_ms": 4.65, "client_ip": "172.23.0.1", "event": "http_request"}
+2026-10-30T06:36:15Z [deploy] no previous good version to roll back to - leaving stack as is for investigation

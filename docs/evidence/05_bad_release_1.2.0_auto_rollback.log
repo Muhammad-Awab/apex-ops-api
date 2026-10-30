@@ -1,0 +1,51 @@
+2026-10-30T06:38:09Z [deploy] deploying apex-ops-api:1.2.0 (last known good: 1.1.0)
+ Container apex-ops-db-1  Running
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+ Container apex-ops-app-1  Recreate
+ Container apex-ops-app-1  Recreated
+ Container apex-ops-app-1  Starting
+ Container apex-ops-app-1  Started
+2026-10-30T06:38:47Z [deploy] readiness NOT OK after 30s: {"status":"not_ready","checks":{"fault_injection":"FAULT_MODE=not_ready"}}
+2026-10-30T06:38:47Z [deploy] FAILED: 1.2.0 did not pass readiness/smoke checks. Last 20 app log lines:
+{"ts": "2026-10-30T06:38:19.088+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Started server process [1]", "service": "apex-ops-api", "version": "1.2.0", "env": "local"}
+{"ts": "2026-10-30T06:38:19.088+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Waiting for application startup.", "service": "apex-ops-api", "version": "1.2.0", "env": "local"}
+{"ts": "2026-10-30T06:38:19.089+00:00", "level": "INFO", "logger": "apex.api", "msg": "service starting", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "event": "startup", "database": "postgresql+psycopg://apex:***@db:5432/apex_ops"}
+{"ts": "2026-10-30T06:38:19.089+00:00", "level": "WARNING", "logger": "apex.api", "msg": "fault injection active", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "event": "fault_mode", "error": "not_ready"}
+{"ts": "2026-10-30T06:38:19.197+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Application startup complete.", "service": "apex-ops-api", "version": "1.2.0", "env": "local"}
+{"ts": "2026-10-30T06:38:19.197+00:00", "level": "INFO", "logger": "uvicorn.error", "msg": "Uvicorn running on http://0.0.0.0:8080 (Press CTRL+C to quit)", "service": "apex-ops-api", "version": "1.2.0", "env": "local"}
+{"ts": "2026-10-30T06:38:19.578+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "983b54bd69cc439a9e1251df89bddb37", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 2.47, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:21.727+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "82c141a924b74cc998fc7f20144c41e6", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.64, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:23.899+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "910f0462a689465ca244329d3ba9e58e", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 1.06, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:26.035+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "76bd48e55880452dac571bcda4833820", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.83, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:28.187+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "acead1a6d0b24926bfe240a906828b00", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 1.02, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:30.332+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "24c7933b4b3e4922827858bb690d670c", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 1.96, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:32.473+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "19dae94385a04bce8126faa9776a9294", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 1.33, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:34.605+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "a033993cbd594b5f8a892f5311347617", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.86, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:36.736+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "85b271fa64fa449fb9223f3601f43708", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.59, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:38.845+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "669c9561f7f84950a16e2b56a377092a", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.74, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:40.938+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "0c0f16a2d85347b39de1198743f90336", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.89, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:43.082+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "d52e7cd713e94124aabf2894812c1800", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.99, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:45.228+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "9103016881ea4ceb9dac1903a98498d6", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.74, "client_ip": "172.23.0.1", "event": "http_request"}
+{"ts": "2026-10-30T06:38:47.346+00:00", "level": "ERROR", "logger": "apex.api", "msg": "request", "service": "apex-ops-api", "version": "1.2.0", "env": "local", "request_id": "52e68a28d7234b0ba1e1fcad8ffba07d", "method": "GET", "path": "/readyz", "route": "/readyz", "status": 503, "duration_ms": 0.61, "client_ip": "172.23.0.1", "event": "http_request"}
+2026-10-30T06:38:47Z [deploy] AUTO-ROLLBACK to 1.1.0
+2026-10-30T06:38:49Z [rollback] rolling back: 1.2.0 -> 1.1.0
+ Container apex-ops-db-1  Running
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+ Container apex-ops-app-1  Recreate
+ Container apex-ops-app-1  Recreated
+ Container apex-ops-app-1  Starting
+ Container apex-ops-app-1  Started
+2026-10-30T06:39:02Z [rollback] readiness OK after 8s
+2026-10-30T06:39:03Z [smoke] PASS  liveness /healthz returns 200
+2026-10-30T06:39:03Z [smoke] PASS  readiness /readyz returns 200
+2026-10-30T06:39:03Z [smoke] PASS  running version is 1.1.0
+2026-10-30T06:39:04Z [smoke] PASS  POST /api/v1/incidents creates a record
+2026-10-30T06:39:04Z [smoke] PASS  GET /api/v1/incidents/{id} reads it back
+2026-10-30T06:39:04Z [smoke] PASS  /metrics exposes request counters
+2026-10-30T06:39:06Z [smoke] PASS  app container runs as non-root (uid 10001)
+2026-10-30T06:39:06Z [smoke] PASS  database port is not published to the host
+2026-10-30T06:39:06Z [smoke] result: 8 passed, 0 failed
+2026-10-30T06:39:07Z [rollback] SUCCESS: rolled back to 1.1.0
+deploy.sh exit code: 1

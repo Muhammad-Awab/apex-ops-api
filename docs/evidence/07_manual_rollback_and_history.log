@@ -1,0 +1,58 @@
+2026-10-30T06:39:59Z [rollback] rolling back: 1.1.0 -> 1.0.0
+ Container apex-ops-db-1  Running
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+ Container apex-ops-app-1  Recreate
+ Container apex-ops-app-1  Recreated
+ Container apex-ops-app-1  Starting
+ Container apex-ops-app-1  Started
+2026-10-30T06:40:08Z [rollback] readiness OK after 4s
+2026-10-30T06:40:08Z [smoke] PASS  liveness /healthz returns 200
+2026-10-30T06:40:08Z [smoke] PASS  readiness /readyz returns 200
+2026-10-30T06:40:09Z [smoke] PASS  running version is 1.0.0
+2026-10-30T06:40:09Z [smoke] PASS  POST /api/v1/incidents creates a record
+2026-10-30T06:40:09Z [smoke] PASS  GET /api/v1/incidents/{id} reads it back
+2026-10-30T06:40:09Z [smoke] PASS  /metrics exposes request counters
+2026-10-30T06:40:10Z [smoke] PASS  app container runs as non-root (uid 10001)
+2026-10-30T06:40:10Z [smoke] PASS  database port is not published to the host
+2026-10-30T06:40:10Z [smoke] result: 8 passed, 0 failed
+2026-10-30T06:40:10Z [rollback] SUCCESS: rolled back to 1.0.0
+--- version now: {"service":"apex-ops-api","version":"1.0.0","git_sha":"local","environment":"local"}
+2026-10-30T06:40:12Z [deploy] deploying apex-ops-api:1.1.0 (last known good: 1.0.0)
+ Container apex-ops-db-1  Running
+ Container apex-ops-db-1  Waiting
+ Container apex-ops-db-1  Healthy
+ Container apex-ops-app-1  Recreate
+ Container apex-ops-app-1  Recreated
+ Container apex-ops-app-1  Starting
+ Container apex-ops-app-1  Started
+2026-10-30T06:40:22Z [deploy] readiness OK after 6s
+2026-10-30T06:40:22Z [smoke] PASS  liveness /healthz returns 200
+2026-10-30T06:40:23Z [smoke] PASS  readiness /readyz returns 200
+2026-10-30T06:40:23Z [smoke] PASS  running version is 1.1.0
+2026-10-30T06:40:23Z [smoke] PASS  POST /api/v1/incidents creates a record
+2026-10-30T06:40:23Z [smoke] PASS  GET /api/v1/incidents/{id} reads it back
+2026-10-30T06:40:23Z [smoke] PASS  /metrics exposes request counters
+2026-10-30T06:40:24Z [smoke] PASS  app container runs as non-root (uid 10001)
+2026-10-30T06:40:24Z [smoke] PASS  database port is not published to the host
+2026-10-30T06:40:24Z [smoke] result: 8 passed, 0 failed
+2026-10-30T06:40:24Z [deploy] SUCCESS: 1.1.0 is live at http://127.0.0.1:8080
+--- version now: {"service":"apex-ops-api","version":"1.1.0","git_sha":"local","environment":"local"}
+--- incidents persisted across all releases/rollbacks: 8
+--- release history (.deploy/history.log):
+2026-10-30T06:36:14Z deploy 1.0.0 failed
+2026-10-30T06:36:50Z deploy 1.0.0 success
+2026-10-30T06:37:11Z deploy 1.1.0 success
+2026-10-30T06:38:47Z deploy 1.2.0 failed
+2026-10-30T06:39:06Z rollback 1.1.0 success
+2026-10-30T06:39:31Z deploy 1.3.0 failed
+2026-10-30T06:39:48Z rollback 1.1.0 success
+2026-10-30T06:40:10Z rollback 1.0.0 success
+2026-10-30T06:40:24Z deploy 1.1.0 success
+--- available versioned images:
+apex-ops-api:1.3.0  78ff77440a66  2 minutes ago
+apex-ops-api:1.2.0  486390f7b770  3 minutes ago
+apex-ops-api:1.1.0  5fb47c829004  4 minutes ago
+apex-ops-api:1.0.0  d76bf93719f0  5 minutes ago
+apex-ops-api:ci-local  c69041c86dcc  9 minutes ago
+apex-ops-api:dev  0d5adbd8da98  14 minutes ago

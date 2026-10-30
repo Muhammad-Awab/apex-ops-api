@@ -1,0 +1,33 @@
+## Security posture of the running stack (2026-10-30T06:55:23Z, app {"service":"apex-ops-api","version":"1.5.0","git_sha":"local","environment":"local"})
+
+### 1. App container environment (no password present; only a path to the secret file)
+DB_PORT=5432
+DB_USER=apex
+DB_NAME=apex_ops
+DB_PASSWORD_FILE=/run/secrets/db_password
+ENVIRONMENT=local
+LOG_LEVEL=INFO
+DB_HOST=db
+APP_VERSION=1.5.0
+FAULT_MODE=none
+
+### 2. Secret value absent from env, labels and logs of all containers (count of occurrences)
+inspect app+db: 0
+logs (all services): 0
+
+### 3. Process identity and privileges
+app uid/gid: 10001 10001
+ReadonlyRootfs=true CapDrop=[ALL] CapAdd=<no value> SecurityOpt=[no-new-privileges:true] Privileged=false Memory=268435456 NanoCpus=500000000
+write to /app (expect failure): OSError: [Errno 30] Read-only file system: '/app/pwned'
+write to /tmp tmpfs (expect ok): ok
+
+### 4. Network exposure
+app ports: {"8080/tcp":[{"HostIp":"127.0.0.1","HostPort":"8080"}]}
+db ports:  {"5432/tcp":null}
+backend network internal: true
+
+### 5. Secret file permissions on host
+total 6
+drwxr-xr-x 1 user group   0 Oct 30 11:35 .
+drwxr-xr-x 1 user group   0 Oct 30 11:55 ..
+-rw-r--r-- 1 user group  32 Oct 30 11:35 db_password.txt
