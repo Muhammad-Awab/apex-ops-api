@@ -145,7 +145,7 @@ jobs:
     env:
       VERSION: ${{ needs.build-scan-integration.outputs.version }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: image
       - name: Load tested image
