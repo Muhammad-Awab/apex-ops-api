@@ -49,7 +49,7 @@ jobs:
         run: pip-audit --strict --progress-spinner off -r requirements.txt
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: test-reports
           path: reports/
@@ -125,7 +125,7 @@ jobs:
         if: github.event_name == 'push'
         run: docker save "apex-ops-api:$VERSION" | gzip > image.tar.gz
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: github.event_name == 'push'
         with:
           name: image
