@@ -18,10 +18,10 @@ Every log below is **unedited script output** captured on 2026-10-30 (UTC timest
 | 09 | **Incident drill after the fix:** DB outage gives liveness 200, readiness 503 in ~1.0 s, `apex_db_up 0`, Prometheus alert `ApexDatabaseUnreachable` **firing**. After recovery: ready, data intact | [09_incident_drill_db_outage.log](09_incident_drill_db_outage.log) | `docker compose --profile monitoring up -d prometheus && OUTAGE_SECONDS=100 bash scripts/incident_drill.sh` |
 | 11 | Security posture: secret absent from env/inspect/logs, uid 10001, read-only rootfs, all capabilities dropped, no-new-privileges, DB not exposed, internal backend network | [11_security_posture.log](11_security_posture.log) | commands in the log header (see `docs/SECURITY.md`) |
 
-## Not yet evidenced (needs the candidate's GitHub account)
+## GitHub Actions (CI/CD on GitHub)
 
-The GitHub Actions workflow (`.github/workflows/ci.yml`) was validated with `actionlint` and mirrors `scripts/ci_local.sh` step for step. It has **not been run on GitHub from this machine**, because there was no repository or credentials here. To add that evidence:
-
-1. Push the repo to GitHub and open the **Actions** tab. Screenshot the green run (`ci-green.png`).
-2. Go to **Actions → CI/CD → Run workflow**, tick `demo_intentional_failure`, and screenshot the red `test` job with the skipped downstream jobs (`ci-intentional-failure.png`).
-3. Save the screenshots in this folder.
+| Claim | Evidence |
+|-------|----------|
+| **Full pipeline green on GitHub:** lint/tests/audit, hadolint, then build + Trivy + Compose integration + bad-release auto-rollback test, then publish. Run #7, commit `e5139c7`, 3m 38s. Image published as `ghcr.io/muhammad-awab/apex-ops-api:0.0.0-sha.e5139c7` (exact image that was tested, promoted without rebuild) | [ci-green.png](ci-green.png) |
+| **Intentional failure on GitHub:** manual run with `demo_intentional_failure=true`. `test_intentional_failure_blocks_release` fails (`1 failed, 17 passed`), and **Build/scan/integration and Publish are skipped**. Nothing is released | [ci-intentional-failure.png](ci-intentional-failure.png) |
+| **First GitHub run failed, and the gate held.** The integration job failed with `scripts/smoke_test.sh: Permission denied`: the executable bit is lost when committing from Windows. `deploy.sh` refused to mark the release good and nothing was published. Fixed by invoking helper scripts through `bash` (commit `e5139c7`) | kept in the repository's Actions history |

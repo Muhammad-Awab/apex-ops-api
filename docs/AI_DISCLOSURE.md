@@ -37,7 +37,7 @@ I treated the AI as a capable engineer who needs good context, not a magic box:
 - Reviewed the submission and prepared to demo, explain and modify it in the live review.
 
 ## How correctness was checked
-- Nothing is claimed without a matching log or screenshot in `docs/evidence/`. Failures found along the way are kept as evidence (`03a_*`, `09a_*`, and the first failed GitHub run) and not hidden.
+- Nothing is claimed without a matching log or screenshot in `docs/evidence/`. Failures found along the way are kept as evidence (`03a_*`, `09a_*`, and the first failed GitHub run in the repository's Actions history) and not hidden.
 - Linters: ruff, hadolint, shellcheck, actionlint, promtool. Scanners: pip-audit, Trivy.
 - The pipeline was run on GitHub Actions on my repository, in addition to the local runs.
 

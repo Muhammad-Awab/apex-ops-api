@@ -25,16 +25,15 @@
 | **Bash scripts instead of Ansible/Make/Helm** | Zero extra tooling, readable during a review, and the same scripts run locally and in CI | Bash is less portable. Shellcheck-clean and kept small to compensate |
 
 ## What the evidence shows
-11 quality gates pass, and the intentional failure blocks the release. Two different kinds of bad release were caught and auto-rolled back. A manual rollback and roll-forward worked. A DB outage drill fired a real alert, liveness and readiness behaved correctly, and no data was lost. See `docs/evidence/README.md`. Two genuine defects came out of running the system rather than just writing it: the stale `apex_db_up` gauge and readiness slower than the probe timeout. Both were root-caused, fixed and re-verified. The second one disproved my first hypothesis (see OBSERVABILITY.md §5).
+11 quality gates pass locally, and the full pipeline is green on GitHub Actions, publishing the tested image to GHCR. The intentional failure blocks the release both locally and on GitHub. The first GitHub run failed on a Windows file-permission issue (lost executable bit); the gate held, nothing was published, and the scripts were fixed. Two different kinds of bad release were caught and auto-rolled back. A manual rollback and roll-forward worked. A DB outage drill fired a real alert, liveness and readiness behaved correctly, and no data was lost. See `docs/evidence/README.md`. Two genuine defects came out of running the system rather than just writing it: the stale `apex_db_up` gauge and readiness slower than the probe timeout. Both were root-caused, fixed and re-verified. The second one disproved my first hypothesis (see OBSERVABILITY.md §5).
 
 ## Risks / known gaps
-- GitHub Actions has not yet been run on GitHub (validated with actionlint, mirrored locally). This is the first thing to do after pushing.
 - No auth/TLS/rate limiting. Fine for local-only, required before any exposure.
 - Single DB with no automated backups locally (manual `pg_dump` in the runbook).
 - GitHub Actions are pinned by major tag, not by SHA.
 
 ## With more time (priority order)
-1. Run the pipeline on GitHub and attach the run evidence. Add a branch-protection rule that requires the `CI/CD` checks to pass.
+1. Add a branch-protection rule on `main` that requires the `CI/CD` checks to pass and a PR review, so the gate can't be bypassed by a direct push.
 2. Alembic migrations with an expand/contract policy, plus a migration step in `deploy.sh`.
 3. Zero-downtime blue/green on Compose (2 replicas + Caddy) or move to Cloud Run revisions.
 4. Image signing (cosign) + SBOM + verifying signatures at deploy time. Pin Actions by SHA.

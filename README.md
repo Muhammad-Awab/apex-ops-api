@@ -9,7 +9,7 @@ Everything claimed here is backed by raw logs in [docs/evidence/](docs/evidence/
 | # | Requirement | Implementation | Evidence |
 |---|-------------|----------------|----------|
 | 1 | API in Docker, health/readiness, non-root | [app/](app/), [Dockerfile](Dockerfile): `/healthz`, `/readyz`, uid 10001 | [01](docs/evidence/01_ci_local_pass.log), [11](docs/evidence/11_security_posture.log) |
-| 2 | CI: deps, lint/tests, build, block on failure | [.github/workflows/ci.yml](.github/workflows/ci.yml), [scripts/ci_local.sh](scripts/ci_local.sh) | [01](docs/evidence/01_ci_local_pass.log), [02](docs/evidence/02_ci_local_intentional_failure.log) |
+| 2 | CI: deps, lint/tests, build, block on failure | [.github/workflows/ci.yml](.github/workflows/ci.yml), [scripts/ci_local.sh](scripts/ci_local.sh) | GitHub: [green run](docs/evidence/ci-green.png), [intentional failure](docs/evidence/ci-intentional-failure.png); local: [01](docs/evidence/01_ci_local_pass.log), [02](docs/evidence/02_ci_local_intentional_failure.log) |
 | 3 | Compose: app + DB, env config, persistence | [docker-compose.yml](docker-compose.yml), [.env.example](.env.example), volume `db_data` | [03](docs/evidence/03_deploy_v1.0.0.log), [07](docs/evidence/07_manual_rollback_and_history.log) |
 | 4 | Safe release + rollback, versioned images | [scripts/deploy.sh](scripts/deploy.sh), [scripts/rollback.sh](scripts/rollback.sh) | [05](docs/evidence/05_bad_release_1.2.0_auto_rollback.log), [06](docs/evidence/06_bad_release_1.3.0_smoke_fail_auto_rollback.log), [07](docs/evidence/07_manual_rollback_and_history.log) |
 | 5 | Structured logs, health checks, metrics/alerts, failure investigation | [docs/OBSERVABILITY.md](docs/OBSERVABILITY.md), [monitoring/](monitoring/) | [09](docs/evidence/09_incident_drill_db_outage.log), [09a](docs/evidence/09a_incident_drill_finding_slow_readiness.log) |
@@ -100,7 +100,7 @@ Clean up: `docker compose --profile monitoring down` keeps the data. Adding `-v`
 | `READY_TIMEOUT` | `60` | deploy script: seconds to wait for readiness |
 
 ## Assumptions & trade-offs
-Summarised in [docs/DECISION_MEMO.md](docs/DECISION_MEMO.md). The most important ones: the target is a single host, so deploys recreate the container and cause **~4–8 s of downtime** (fix proposed). The schema uses `create_all`, not migrations (Alembic with expand/contract is the next step). The GitHub Actions workflow is linted and mirrored locally but needs to be run on GitHub to produce run evidence.
+Summarised in [docs/DECISION_MEMO.md](docs/DECISION_MEMO.md). The most important ones: the target is a single host, so deploys recreate the container and cause **~4–8 s of downtime** (fix proposed). The schema uses `create_all`, not migrations (Alembic with expand/contract is the next step).
 
 ## AI assistance
 This submission was built with AI assistance (Claude Code). See [docs/AI_DISCLOSURE.md](docs/AI_DISCLOSURE.md) for exactly what was AI-generated and how it was verified.
