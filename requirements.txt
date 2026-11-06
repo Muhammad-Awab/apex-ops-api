@@ -2,7 +2,7 @@
 # Resolved in python:3.12-slim on 2026-10-30. Update via Dependabot PRs (see .github/dependabot.yml).
 annotated-doc==0.0.5
 annotated-types==0.8.0
-anyio==4.15.1
+anyio==4.16.0
 click==8.5.0
 fastapi==0.162.0
 h11==0.16.0
