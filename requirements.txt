@@ -9,7 +9,7 @@ h11==0.16.0
 idna==3.20
 opentelemetry-api==1.45.2
 prometheus_client==0.26.0
-psycopg==3.3.6
+psycopg==3.3.7
 psycopg-binary==3.3.6
 pydantic==2.14.2
 pydantic_core==2.50.2
