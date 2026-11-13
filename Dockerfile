@@ -4,7 +4,7 @@
 #   dev      - builder + test/lint tooling + tests (used by CI and scripts/ci_local.sh)
 #   runtime  - minimal image: venv + app code, non-root, read-only friendly
 # Base pinned by tag + digest for reproducible builds; Dependabot proposes digest bumps.
-FROM python:3.12-slim@sha256:aa943ce411423c7582288f18707ff66eddcbaeb510502d747a72aeb34f30d159 AS base
+FROM python:3.15-slim@sha256:65a65fc7b30b06cb6df4930fd4650697cb23f4c2698ab81fc87e4b031bc36928 AS base
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
